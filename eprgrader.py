@@ -273,8 +273,17 @@ def begin_grading(folder: pathlib.Path, ratings_file: pathlib.Path, check_style:
         with zipfile.ZipFile(file, 'r') as zip_obj:
             # zip_obj.extractall(file.parent)
             safe_extract_zip(zip_obj, file.parent)
-    target_folders = [f for f in itertools.chain.from_iterable((group.iterdir() for group in folder.glob('**/abgaben')))
-                      if f.is_dir()]
+    #target_folders = [f for f in itertools.chain.from_iterable((group.iterdir() for group in folder.glob('**/abgaben')))
+    #                  if f.is_dir() else f.parent]
+    target_folders = []
+
+    for f in list(folder.glob("**/abgaben")):
+        if "__MACOSX" in str(f):
+            continue
+        target_folders.append(f)
+
+    target_folders = set(target_folders)
+
     if check_style:
         print("Running style check...")
         lint_files(target_folders, author_pairs, deduction)
