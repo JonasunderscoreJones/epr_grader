@@ -278,6 +278,8 @@ def begin_grading(folder: pathlib.Path, ratings_file: pathlib.Path, check_style:
     target_folders = []
 
     for f in list(folder.glob("**/abgaben")):
+        if not f.is_dir():
+            f = f.parent()
         if "__MACOSX" in str(f):
             continue
         target_folders.append(f)
